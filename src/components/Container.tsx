@@ -1,8 +1,7 @@
 import React, { CSSProperties, ReactNode } from 'react';
-import tw, { css, styled } from 'twin.macro';
+import styled, { css } from 'styled-components';
 import { parseStyle } from '../utils';
 
-type Gap = 'sm' | 'md' | 'lg';
 type Direction = 'column' | 'row';
 type Alignment = 'start' | 'center' | 'end';
 
@@ -19,15 +18,15 @@ type Props = Partial<{
   row: boolean;
 
   /**
-   * Makes the container take up as much space as the content takes up, by default, the container
+   * Makes the container take up as much space as the content, by default, the container
    * will take up as much space as possible.
    */
   inline: boolean;
 
   /**
-   * Defines the gap between the direct items inside the container.
+   * Defines the gap between the direct items inside the container (uses the CSS `rem` unit).
    */
-  gap: Gap;
+  gap: number;
 
   /**
    * Sets the direction of the container on each {@link https://tailwindcss.com/docs/breakpoints breakpoint}.
@@ -57,78 +56,125 @@ type Props = Partial<{
 }>;
 
 const TwContainer = styled.div<Omit<Props, 'children'>>`
-  ${tw`flex flex-col flex-nowrap`}
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
 
-  ${({ inline }) => inline && tw`inline-flex`}
-  ${({ wrap, gap }) => (wrap || gap) && tw`flex-wrap`}
+  ${({ inline }) =>
+    inline &&
+    css`
+      display: inline-flex;
+    `}
+  ${({ wrap, gap }) =>
+    (wrap || gap) &&
+    css`
+      flex-wrap: wrap;
+    `}
 
   ${({ align }) =>
     align &&
     (align === 'start'
       ? css`
-          ${tw`items-start justify-start`}
+          align-items: flex-start;
+          justify-content: flex-start;
         `
       : align === 'center'
       ? css`
-          ${tw`items-center justify-center`}
+          align-items: center;
+          justify-content: center;
         `
       : css`
-          ${tw`items-end justify-end`}
+          align-items: flex-end;
+          justify-content: flex-end;
         `)}
 
   ${({ directions }) =>
     directions &&
-    (directions[0] === 'column' ? tw`sm:flex-col` : tw`sm:flex-row`)}
+    (directions[0] === 'column'
+      ? css`
+          @media (min-width: 640px) {
+            flex-direction: column;
+          }
+        `
+      : css`
+          @media (min-width: 640px) {
+            flex-direction: row;
+          }
+        `)}
 
   ${({ directions }) =>
     directions &&
-    (directions[1] === 'column' ? tw`md:flex-col` : tw`md:flex-row`)}
+    (directions[1] === 'column'
+      ? css`
+          @media (min-width: 768px) {
+            flex-direction: column;
+          }
+        `
+      : css`
+          @media (min-width: 768px) {
+            flex-direction: row;
+          }
+        `)}
 
   ${({ directions }) =>
     directions &&
-    (directions[2] === 'column' ? tw`lg:flex-col` : tw`lg:flex-row`)}
+    (directions[2] === 'column'
+      ? css`
+          @media (min-width: 1024px) {
+            flex-direction: column;
+          }
+        `
+      : css`
+          @media (min-width: 1024px) {
+            flex-direction: row;
+          }
+        `)}
 
   ${({ directions }) =>
     directions &&
-    (directions[3] === 'column' ? tw`xl:flex-col` : tw`xl:flex-row`)}
+    (directions[3] === 'column'
+      ? css`
+          @media (min-width: 1280px) {
+            flex-direction: column;
+          }
+        `
+      : css`
+          @media (min-width: 1280px) {
+            flex-direction: row;
+          }
+        `)}
 
   ${({ directions }) =>
     directions &&
-    (directions[4] === 'column' ? tw`2xl:flex-col` : tw`2xl:flex-row`)}
+    (directions[4] === 'column'
+      ? css`
+          @media (min-width: 1536px) {
+            flex-direction: column;
+          }
+        `
+      : css`
+          @media (min-width: 1536px) {
+            flex-direction: row;
+          }
+        `)}
 
-  ${({ row }) => row && tw`flex-row`}
+  ${({ row }) =>
+    row &&
+    css`
+      flex-direction: row;
+    `}
 
   ${({ gap }) =>
     gap &&
-    (gap === 'sm'
-      ? css`
-          --gap: 1rem;
-          margin: calc(-1 * var(--gap)) 0 0 calc(-1 * var(--gap));
-          width: calc(100% + var(--gap));
+    css`
+      --gap: ${gap}rem;
+      margin: calc(-1 * var(--gap)) 0 0 calc(-1 * var(--gap));
+      width: calc(100% + var(--gap));
 
-          & > * {
-            margin: var(--gap) 0 0 var(--gap);
-          }
-        `
-      : gap === 'md'
-      ? css`
-          --gap: 2rem;
-          margin: calc(-1 * var(--gap)) 0 0 calc(-1 * var(--gap));
-          width: calc(100% + var(--gap));
-
-          & > * {
-            margin: var(--gap) 0 0 var(--gap);
-          }
-        `
-      : css`
-          --gap: 3rem;
-          margin: calc(-1 * var(--gap)) 0 0 calc(-1 * var(--gap));
-          width: calc(100% + var(--gap));
-
-          & > * {
-            margin: var(--gap) 0 0 var(--gap);
-          }
-        `)}
+      & > * {
+        margin: var(--gap) 0 0 var(--gap);
+      }
+    `}
 
   ${({ styles }) =>
     styles &&
