@@ -48,7 +48,7 @@ Columns.args = {
 
 export const Gaps: Story<ContainerProps> = Template.bind({});
 Gaps.args = {
-  gap: 1,
+  gap: 2,
   children: (
     <>
       <div>Row 1</div>
