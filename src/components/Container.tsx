@@ -36,7 +36,7 @@ type Props = Partial<{
    * ```
    * The breakpoints follow an ascending order.
    */
-  directions: [Direction, Direction, Direction, Direction, Direction];
+  directions: Direction[];
 
   /**
    * Wraps the container's items if they don't fit on the screen.
