@@ -1,15 +1,18 @@
+import 'twin.macro';
 import React, { FC, HTMLAttributes, ReactChild } from 'react';
+import { Container } from './components';
 
 export interface Props extends HTMLAttributes<HTMLDivElement> {
-  /** custom content, defaults to 'the snozzberries taste like snozzberries' */
   children?: ReactChild;
 }
 
-// Please do not use types off of a default export module or else Storybook Docs will suffer.
-// see: https://github.com/storybookjs/storybook/issues/9556
-/**
- * A custom Thing component. Neat!
- */
-export const Thing: FC<Props> = ({ children }) => {
-  return <div>{children || `the snozzberries taste like snozzberries`}</div>;
+export const Thing: FC<Props> = () => {
+  return (
+    <Container gap="sm" align="center">
+      <div tw="text-light-foreground">Test</div>
+      <div tw="text-light-foreground">Test 2</div>
+    </Container>
+  );
 };
+
+export * from './components';
