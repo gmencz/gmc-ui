@@ -1,5 +1,6 @@
 import React, { CSSProperties, ReactNode } from 'react';
 import styled, { css } from 'styled-components';
+import { spacing as designSpacing } from '../design/spacing';
 import { parseStyle } from '../utils';
 
 type Direction = 'column' | 'row';
@@ -43,6 +44,11 @@ type Props = Partial<{
   wrap: boolean;
 
   /**
+   * Sets the spacing or padding of the container.
+   */
+  spacing: keyof typeof designSpacing;
+
+  /**
    * Overrides the container's CSS properties with the provided ones, use it just like
    * you would use React's `style` prop with the difference that the styles won't be
    * applied via the {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/style style HTML attribute}
@@ -59,6 +65,11 @@ const TwContainer = styled.div<Omit<Props, 'children'>>`
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
+  
+  &:not(.gmc-ui-gap) {
+    padding: ${({ spacing }) =>
+      spacing ? `${designSpacing[spacing]}` : `${designSpacing['space-2x']}`}
+  }
 
   ${({ inline }) =>
     inline &&
@@ -169,10 +180,13 @@ const TwContainer = styled.div<Omit<Props, 'children'>>`
     css`
       --gap: ${gap}rem;
       margin: calc(-1 * var(--gap)) 0 0 calc(-1 * var(--gap));
-      width: calc(100% + var(--gap));
 
       & > * {
         margin: var(--gap) 0 0 var(--gap);
+      }
+
+      & > .gmc-ui-gap {
+        margin: 0;
       }
     `}
 
@@ -184,7 +198,11 @@ const TwContainer = styled.div<Omit<Props, 'children'>>`
 `;
 
 function Container({ children, ...props }: Props) {
-  return <TwContainer {...props}>{children}</TwContainer>;
+  return (
+    <TwContainer {...props} className={props.gap ? 'gmc-ui-gap' : undefined}>
+      {children}
+    </TwContainer>
+  );
 }
 
 export { Container, Props as ContainerProps };
